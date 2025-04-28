@@ -1,0 +1,12 @@
+<!-- views/tenders/index.ejs -->
+<h1>Lista przetargów</h1>
+<ul>
+  <% tenders.forEach(tender => { %>
+    <li>
+      <a href="/tenders/<%= tender.id %>">
+        <%= tender.nazwa %> <!-- Wyświetlanie nazwy przetargu -->
+      </a>
+      <p><%= tender.opis %></p> <!-- Opcjonalnie wyświetlanie opisu przetargu -->
+    </li>
+  <% }) %>
+</ul>
