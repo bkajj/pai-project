@@ -1,22 +1,60 @@
-const tenderModel = require('../models/Tender');
+const Tender = require('../models/Tender');
 
-const getAllTenders = async (req, res) => {
+exports.showHome = (req, res) => {
+  res.render('index');
+};
+
+function formatDate(date) {
+  return new Date(date).toLocaleString('pl-PL', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+exports.showTenderList = async (req, res) => {
   try {
-    const [tenders] = await tenderModel.getTenders();
-    res.render('index', { tenders }); 
+    const tenders = await Tender.getAll();
+    const formattedTenders = tenders.map(tender => {
+      return {
+        ...tender,
+        start: formatDate(tender.start),
+        end: formatDate(tender.end),
+      };
+    });
+
+    res.render('tenderList', { tenders: formattedTenders });
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error('Błąd podczas pobierania przetargów:', err);
+    res.status(500).send('Błąd bazy danych');
   }
 };
 
-const createTender = async (req, res) => {
-  const { name, description, start, end, maxValue } = req.body;
-  try {
-    await tenderModel.addTender(name, description, start, end, maxValue);
-    res.redirect('/tenders');
-  } catch (err) {
-    res.status(500).send('Error while adding tender');
-  }
+exports.showFinishedTenderList = async (req, res) => {
+  const tenders = await Tender.getFinished();
+  const formattedTenders = tenders.map(tender => {
+    return {
+      ...tender,
+      start: formatDate(tender.start),
+      end: formatDate(tender.end),
+    };
+  });
+  res.render('finishedTenderList', { tenders: formattedTenders });
 };
 
-module.exports = { getAllTenders, createTender };
+exports.showAddTender = (req, res) => {
+  res.render('addTender');
+};
+
+exports.createTender = async (req, res) => {
+  await Tender.create(req.body);
+  res.redirect('/tenders');
+};
+
+exports.showTenderDetails = async (req, res) => {
+  const tender = await Tender.getById(req.params.id);
+  res.render('tenderDetails', { tender });
+};

@@ -1,14 +1,29 @@
-const { pool } = require('../config/db.js');
+const { getPool } = require('../config/db');
+//komunikacja z baza
 
-const getTenders = () => {
-  return pool.promise().query('SELECT * FROM tenders');
-};
+class Tender {
+  static async getAll() {
+    const [rows] = await getPool().query('SELECT * FROM tenders');
+    return rows;
+  }
 
-const addTender = (name, description, start, end, maxValue) => {
-  return pool.promise().execute(
-    'INSERT INTO tenders (name, description, start, end, max_value) VALUES (?, ?, ?, ?, ?)', 
-    [name, description, start, end, maxValue]
-  );
-};
+  static async getById(id) {
+    const [rows] = await getPool().query('SELECT * FROM tenders WHERE id = ?', [id]);
+    return rows[0];
+  }
 
-module.exports = { getTenders, addTender };
+  static async create(data) {
+    const { title, description, institution, start, end, max_budget } = data;
+    await getPool().query(
+      'INSERT INTO tenders (title, description, institution, start, end, max_budget) VALUES (?, ?, ?, ?, ?, ?)',
+      [title, description, institution, start, end, max_budget]
+    );
+  }
+
+  static async getFinished() {
+    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end < NOW()');
+    return rows;
+  }
+}
+
+module.exports = Tender;

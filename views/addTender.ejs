@@ -1,0 +1,27 @@
+<%- include('header', { title: 'Dodaj przetarg' }) %>
+
+<h1>Dodaj nowy przetarg</h1>
+
+<form action="/tenders" method="POST">
+  <label>Nazwa przedmiotu przetargu:</label>
+  <input type="text" name="name" required>
+
+  <label>Instytucja zamawiająca:</label>
+  <input type="text" name="organization" required>
+
+  <label>Opis przedmiotu przetargu:</label>
+  <textarea name="description" required></textarea>
+
+  <label>Data i godzina rozpoczęcia:</label>
+  <input type="datetime-local" name="start" required>
+
+  <label>Data i godzina zakończenia:</label>
+  <input type="datetime-local" name="end" required>
+
+  <label>Maksymalna wartość (PLN):</label>
+  <input type="number" name="maxValue" required>
+
+  <button type="submit">Dodaj przetarg</button>
+</form>
+
+<%- include('footer') %>

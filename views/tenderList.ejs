@@ -1,0 +1,25 @@
+<%- include('header', { title: 'Lista przetargów' }) %>
+
+<h1>Lista trwających przetargów</h1>
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Tytuł</th>
+      <th>Data rozpoczęcia</th>
+      <th>Data zakończenia</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% tenders.forEach((t, i) => { %>
+      <tr>
+        <td><%= i + 1 %></td>
+        <td><a href="/tenders/<%= t.id %>"><%= t.title %></a></td>
+        <td><%= t.start %></td>
+        <td><%= t.end %></td>
+      </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<%- include('footer') %>
