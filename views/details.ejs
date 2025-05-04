@@ -27,16 +27,34 @@
 
 <hr>
 
-<h2>Złożone oferty</h2>
-
-<% if (offers.length === 0) { %>
-  <p>Brak ofert.</p>
-<% } else { %>
+<% if (hasValidOffers) { %>
+  <h2>Najkorzystniejsze oferty:</h2>
   <ul>
     <% offers.forEach(offer => { %>
-      <li><strong><%= offer.bidder_name %></strong>: <%= offer.offer_value %> zł</li>
+      <li>
+        <strong><%= offer.bidder_name %></strong> – 
+        <%= parseFloat(offer.offer_value).toFixed(2) %> zł
+        (złożono: <%= new Date(offer.submitted_at).toLocaleString() %>)
+      </li>
     <% }) %>
   </ul>
+<% } else { %>
+  <p style="color: red;"><strong>Przetarg zakończony bez rozstrzygnięcia – brak ofert mieszczących się w budżecie.</strong></p>
+
+  <% if (offers.length > 0) { %>
+    <p>Najtańsze oferty (przekraczające budżet):</p>
+    <ul>
+      <% offers.forEach(offer => { %>
+        <li>
+          <strong><%= offer.bidder_name %></strong> – 
+          <%= parseFloat(offer.offer_value).toFixed(2) %> zł
+          (złożono: <%= new Date(offer.submitted_at).toLocaleString() %>)
+        </li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>Brak ofert.</p>
+  <% } %>
 <% } %>
 
 <%- include('footer') %>

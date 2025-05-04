@@ -15,6 +15,26 @@ class Offer {
     );
     return rows;
   }
+
+  static async getValidOffersForTender(tenderId, maxBudget) {
+    const [offers] = await getPool().query(
+      `SELECT * FROM offers 
+       WHERE tender_id = ? AND offer_value <= ? 
+       ORDER BY offer_value ASC`,
+      [tenderId, maxBudget]
+    );
+    return offers;
+  }
+
+  static async getAllOffersForTender(tenderId) {
+    const [offers] = await getPool().query(
+      `SELECT * FROM offers 
+       WHERE tender_id = ? 
+       ORDER BY offer_value ASC`,
+      [tenderId]
+    );
+    return offers;
+  }
 }
 
 module.exports = Offer;
