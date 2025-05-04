@@ -6,7 +6,8 @@
     <tr>
       <th>#</th>
       <th>Tytuł</th>
-      <th>Status</th>
+      <th>Data rozpoczęcia</th>
+      <th>Data zakończenia</th>
     </tr>
   </thead>
   <tbody>
@@ -14,7 +15,8 @@
       <tr>
         <td><%= i + 1 %></td>
         <td><a href="/tenders/<%= t.id %>"><%= t.title %></a></td>
-        <td>Zakończono</td>
+        <td><%= t.start %></td>
+        <td><%= t.end %></td>
       </tr>
     <% }) %>
   </tbody>
