@@ -1,5 +1,5 @@
 const Tender = require('../models/Tender');
-
+const Offer = require('../models/Offer');
 exports.showHome = (req, res) => {
   res.render('index');
 };
@@ -17,7 +17,7 @@ function formatDate(date) {
 
 exports.showTenderList = async (req, res) => {
   try {
-    const tenders = await Tender.getAll();
+    const tenders = await Tender.getActive();
     const formattedTenders = tenders.map(tender => {
       return {
         ...tender,
@@ -56,5 +56,17 @@ exports.createTender = async (req, res) => {
 
 exports.showTenderDetails = async (req, res) => {
   const tender = await Tender.getById(req.params.id);
-  res.render('tenderDetails', { tender });
+  if (!tender) return res.status(404).send('Nie znaleziono przetargu');
+
+  const offers = await Offer.getByTenderId(req.params.id);
+
+  res.render('details', {
+    tender: {
+      ...tender,
+      start: formatDate(tender.start),
+      end: formatDate(tender.end),
+    },
+    offers
+  });
 };
+

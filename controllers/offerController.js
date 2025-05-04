@@ -27,3 +27,10 @@ exports.showTenderOffers = async (req, res) => {
     noWinner: !hasValid
   });
 };
+
+exports.showOfferForm = async (req, res) => {
+    const tender = await Tender.getById(req.params.id);
+    if (!tender) return res.status(404).send('Nie znaleziono przetargu');
+  
+    res.render('tenders/offerForm', { tender });
+  };

@@ -2,12 +2,12 @@
 
 <h1>Dodaj nowy przetarg</h1>
 
-<form action="/tenders" method="POST">
+<form action="/tenders/add" method="POST">
   <label>Nazwa przedmiotu przetargu:</label>
-  <input type="text" name="name" required>
+  <input type="text" name="title" required>
 
   <label>Instytucja zamawiająca:</label>
-  <input type="text" name="organization" required>
+  <input type="text" name="institution" required>
 
   <label>Opis przedmiotu przetargu:</label>
   <textarea name="description" required></textarea>
@@ -19,7 +19,7 @@
   <input type="datetime-local" name="end" required>
 
   <label>Maksymalna wartość (PLN):</label>
-  <input type="number" name="maxValue" required>
+  <input type="number" name="max_budget" required>
 
   <button type="submit">Dodaj przetarg</button>
 </form>

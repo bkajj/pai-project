@@ -1,0 +1,42 @@
+<%- include('header', { title: 'Dodaj przetarg' }) %>
+
+<h1>Szczegóły przetargu</h1>
+
+<p><strong>Tytuł:</strong> <%= tender.title %></p>
+<p><strong>Instytucja:</strong> <%= tender.institution %></p>
+<p><strong>Opis:</strong> <%= tender.description %></p>
+<p><strong>Data rozpoczęcia:</strong> <%= tender.start %></p>
+<p><strong>Data zakończenia:</strong> <%= tender.end %></p>
+<p><strong>Maksymalny budżet:</strong> <%= tender.max_budget %> zł</p>
+
+<hr>
+
+<% if (new Date(tender.end) < new Date()) { %>
+  <p>Przetarg zakończony.</p>
+<% } else { %>
+  <h2>Złóż ofertę</h2>
+
+  <form style="margin-bottom: 2em;" action="/tenders/<%= tender.id %>/offer" method="POST">
+    <label for="bidder_name">Nazwa wykonawcy:</label>
+    <input type="text" name="bidder_name" id="bidder_name" required>
+    <label for="offer_value">Kwota (PLN):</label>
+    <input type="number" step="0.01" name="offer_value" id="offer_value" required>
+    <button type="submit">Złóż ofertę</button>
+  </form>
+<% } %>
+
+<hr>
+
+<h2>Złożone oferty</h2>
+
+<% if (offers.length === 0) { %>
+  <p>Brak ofert.</p>
+<% } else { %>
+  <ul>
+    <% offers.forEach(offer => { %>
+      <li><strong><%= offer.bidder_name %></strong>: <%= offer.offer_value %> zł</li>
+    <% }) %>
+  </ul>
+<% } %>
+
+<%- include('footer') %>

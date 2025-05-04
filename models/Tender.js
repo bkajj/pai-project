@@ -24,6 +24,11 @@ class Tender {
     const [rows] = await getPool().query('SELECT * FROM tenders WHERE end < NOW()');
     return rows;
   }
+
+  static async getActive() {
+    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end > NOW()');
+    return rows;
+  }
 }
 
 module.exports = Tender;
