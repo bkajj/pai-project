@@ -5,14 +5,18 @@
 <p><strong>Tytuł:</strong> <%= tender.title %></p>
 <p><strong>Instytucja:</strong> <%= tender.institution %></p>
 <p><strong>Opis:</strong> <%= tender.description %></p>
-<p><strong>Data rozpoczęcia:</strong> <%= tender.start %></p>
-<p><strong>Data zakończenia:</strong> <%= tender.end %></p>
+<p><strong>Data rozpoczęcia:</strong> <%= start %></p>
+<p><strong>Data zakończenia:</strong> <%= end %></p>
 <p><strong>Maksymalny budżet:</strong> <%= tender.max_budget %> zł</p>
 
 <hr>
 
 <% if (new Date(tender.end) < new Date()) { %>
-  <p>Przetarg zakończony.</p>
+  <% if (!hasValidOffers) { %>
+    <p style="color: red;"><strong>Przetarg zakończony bez rozstrzygnięcia – brak ofert mieszczących się w budżecie.</strong></p>
+  <% } else { %>
+    <p>Przetarg zakończony.</p>
+  <% } %>
 <% } else { %>
   <h2>Złóż ofertę</h2>
 
@@ -38,23 +42,19 @@
       </li>
     <% }) %>
   </ul>
+<% } else if (offers.length > 0) { %>
+  <h2>Najtańsze oferty:</h2>
+  <ul>
+    <% offers.forEach(offer => { %>
+      <li>
+        <strong><%= offer.bidder_name %></strong> – 
+        <%= parseFloat(offer.offer_value).toFixed(2) %> zł
+        (złożono: <%= new Date(offer.submitted_at).toLocaleString() %>)
+      </li>
+    <% }) %>
+  </ul>
 <% } else { %>
-  <p style="color: red;"><strong>Przetarg zakończony bez rozstrzygnięcia – brak ofert mieszczących się w budżecie.</strong></p>
-
-  <% if (offers.length > 0) { %>
-    <p>Najtańsze oferty (przekraczające budżet):</p>
-    <ul>
-      <% offers.forEach(offer => { %>
-        <li>
-          <strong><%= offer.bidder_name %></strong> – 
-          <%= parseFloat(offer.offer_value).toFixed(2) %> zł
-          (złożono: <%= new Date(offer.submitted_at).toLocaleString() %>)
-        </li>
-      <% }) %>
-    </ul>
-  <% } else { %>
-    <p>Brak ofert.</p>
-  <% } %>
+  <p>Brak ofert.</p>
 <% } %>
 
 <%- include('footer') %>

@@ -10,6 +10,5 @@ router.post('/add', tenderController.createTender);
 router.get('/:id', tenderController.showTenderDetails);
 router.post('/:id/offer', offerController.submitOffer);
 router.get('/:id/offer', offerController.showOfferForm);
-router.get('/:id/finished', offerController.showTenderOffers);
 
 module.exports = router;

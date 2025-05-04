@@ -1,5 +1,6 @@
 const Offer = require('../models/Offer');
 const Tender = require('../models/Tender');
+const tenderController = require('../controllers/tenderController');
 
 exports.submitOffer = async (req, res) => {
   const tender = await Tender.getById(req.params.id);
@@ -16,13 +17,17 @@ exports.submitOffer = async (req, res) => {
 
 exports.showTenderOffers = async (req, res) => {
   const tender = await Tender.getById(req.params.id);
+  const formattedStart = await tenderController.formatDate(tender.start);
+  const formattedEnd = await tenderController.formatDate(tender.end);
   const offers = await Offer.getByTenderId(req.params.id);
 
-  const validOffers = offers.filter(o => o.offer_value <= tender.max_budget);
+  const validOffers = offers.filter(o => o.offer_value <= formattedTender.max_budget);
   const hasValid = validOffers.length > 0;
 
   res.render('finishedTenderDetails', {
     tender,
+    start: formattedStart,
+    end: formattedEnd,
     offers: validOffers,
     noWinner: !hasValid
   });

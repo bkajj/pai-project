@@ -58,6 +58,9 @@ exports.showTenderDetails = async (req, res) => {
   const tender = await Tender.getById(req.params.id);
   if (!tender) return res.status(404).send('Nie znaleziono przetargu');
 
+  const formattedStart = await formatDate(tender.start);
+  const formattedEnd = await formatDate(tender.end);
+
   const validOffers = await Offer.getValidOffersForTender(tender.id, tender.max_budget);
   const allOffers = await Offer.getAllOffersForTender(tender.id);
 
@@ -66,7 +69,9 @@ exports.showTenderDetails = async (req, res) => {
     res.render('details', {
       tender: tender,
       offers: hasValidOffers ? validOffers : allOffers,
-      hasValidOffers: hasValidOffers
+      hasValidOffers: hasValidOffers,
+      start: formattedStart,
+      end: formattedEnd
     });
 };
 
