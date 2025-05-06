@@ -3,8 +3,12 @@ const app = express();
 const path = require('path');
 const tenderRoutes = require('./routes/tenderRoutes');
 const { initializeDatabase } = require('./config/db');
+const args = process.argv.slice(2);
 
-initializeDatabase();
+if(args.length > 0 && args[0] === 'test')
+  initializeDatabase(true);
+else
+  initializeDatabase(false);
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));

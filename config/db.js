@@ -9,7 +9,7 @@ const conf = {
 
 let pool;
 
-const initializeDatabase = async () => {
+const initializeDatabase = async (testEnv) => {
   try {
     const connection = await mysql.createConnection({
       host: conf.host,
@@ -17,9 +17,19 @@ const initializeDatabase = async () => {
       password: conf.password,
     });
 
+    if (testEnv) {
+      console.log(`!!!Srodowisko testowe!!!`);
+      conf.database += '_test';
+    }
+
     const [databases] = await connection.query('SHOW DATABASES');
     const databaseExists = databases.some(db => db.Database === conf.database);
 
+    if (testEnv) {
+      await connection.query(`DROP DATABASE IF EXISTS ${conf.database}`);
+      console.log(`Usunięto bazę danych "${conf.database}".`);
+    }
+    
     if (!databaseExists) {
       await connection.query(`CREATE DATABASE ${conf.database}`);
       console.log(`Utworzono bazę danych "${conf.database}".`);
