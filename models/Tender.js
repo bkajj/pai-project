@@ -1,5 +1,15 @@
 const { getPool } = require('../config/db');
-//komunikacja z baza
+
+let currentTime = new Date();
+
+function setCurrentTime(newTime) {
+  console.log('[DEBUG] setCurrentTime:', newTime); // dodaj to
+  currentTime = newTime;
+}
+
+function getCurrentTime() {
+  return currentTime;
+}
 
 class Tender {
   static async getAll() {
@@ -21,14 +31,14 @@ class Tender {
   }
 
   static async getFinished() {
-    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end < NOW()');
+    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end < ?', [getCurrentTime()]);
     return rows;
   }
 
   static async getActive() {
-    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end > NOW()');
+    const [rows] = await getPool().query('SELECT * FROM tenders WHERE end > ?', [getCurrentTime()]);
     return rows;
   }
 }
 
-module.exports = Tender;
+module.exports = {Tender, setCurrentTime, getCurrentTime};

@@ -30,7 +30,7 @@ const initializeDatabase = async (testEnv) => {
       console.log(`Usunięto bazę danych "${conf.database}".`);
     }
     
-    if (!databaseExists) {
+    if (!databaseExists || testEnv) {
       await connection.query(`CREATE DATABASE ${conf.database}`);
       console.log(`Utworzono bazę danych "${conf.database}".`);
 

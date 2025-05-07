@@ -1,11 +1,11 @@
 const Offer = require('../models/Offer');
-const Tender = require('../models/Tender');
+const {Tender} = require('../models/Tender');
 const tenderController = require('../controllers/tenderController');
 
 exports.submitOffer = async (req, res) => {
   const tender = await Tender.getById(req.params.id);
 
-  const now = new Date();
+  const now = req.now || new Date();
   const endDate = new Date(tender.end);
   if (now > endDate) {
     return res.status(400).send('Przetarg zakończony');

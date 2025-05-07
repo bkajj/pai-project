@@ -11,7 +11,7 @@
 
 <hr>
 
-<% if (new Date(tender.end) < new Date()) { %>
+<% if (new Date(tender.end) < new Date(currentTime)) { %>
   <% if (!hasValidOffers) { %>
     <p style="color: red;"><strong>Przetarg zakończony bez rozstrzygnięcia – brak ofert mieszczących się w budżecie.</strong></p>
   <% } else { %>
@@ -24,7 +24,7 @@
     <label for="bidder_name">Nazwa wykonawcy:</label>
     <input type="text" name="bidder_name" id="bidder_name" required>
     <label for="offer_value">Kwota (PLN):</label>
-    <input type="number" step="0.01" name="offer_value" id="offer_value" required>
+    <input type="number" step="0.01" min="0" name="offer_value" id="offer_value" required>
     <button type="submit">Złóż ofertę</button>
   </form>
 <% } %>

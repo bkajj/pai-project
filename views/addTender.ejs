@@ -19,9 +19,19 @@
   <input type="datetime-local" name="end" required>
 
   <label>Maksymalna wartość (PLN):</label>
-  <input type="number" name="max_budget" required>
+  <input type="number" name="max_budget" min="0" required>
 
   <button type="submit">Dodaj przetarg</button>
 </form>
 
 <%- include('footer') %>
+
+<script>
+  const form = document.querySelector('form');
+  const startInput = form.querySelector('input[name="start"]');
+  const endInput = form.querySelector('input[name="end"]');
+
+  startInput.addEventListener('change', () => {
+    endInput.min = startInput.value;
+  });
+</script>

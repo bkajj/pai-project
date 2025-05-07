@@ -19,6 +19,16 @@ app.use(express.json());
 app.get('/', (req, res) => res.render('index'));
 app.use('/tenders', tenderRoutes);
 
+if (args.length > 0 && args[0] === 'test') {
+  const { setCurrentTime } = require('./models/Tender');
+
+  app.post('/__test/set-time', (req, res) => {
+    const newTime = new Date(req.body.time);
+    setCurrentTime(newTime);
+    res.sendStatus(204);
+  });
+}
+
 app.listen(3000, () => {
   console.log('Server running on http://localhost:3000');
 });

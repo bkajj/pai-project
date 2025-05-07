@@ -1,4 +1,4 @@
-const Tender = require('../models/Tender');
+const {Tender, getCurrentTime} = require('../models/Tender');
 const Offer = require('../models/Offer');
 exports.showHome = (req, res) => {
   res.render('index');
@@ -71,7 +71,8 @@ exports.showTenderDetails = async (req, res) => {
       offers: hasValidOffers ? validOffers : allOffers,
       hasValidOffers: hasValidOffers,
       start: formattedStart,
-      end: formattedEnd
+      end: formattedEnd,
+      currentTime: getCurrentTime()
     });
 };
 
